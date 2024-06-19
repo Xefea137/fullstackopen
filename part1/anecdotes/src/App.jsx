@@ -34,11 +34,16 @@ const App = () => {
     setPoints(copy)
   }
 
+  const maxOfArray = points.indexOf(Math.max(...points))
+
   return (
     <div>
+      <h1>Anecdote of the day</h1>
       <Display anecdote={anecdotes[selected]} votes={points[selected]} />
       <Button handleClick={updateVote} text='vote' />
       <Button handleClick={() => setSelected(randomNum())} text='next anecdote' />
+      <h1>Anecdote with most votes</h1>
+      <Display anecdote={anecdotes[maxOfArray]} votes={points[maxOfArray]}/>
     </div>
   )
 }
