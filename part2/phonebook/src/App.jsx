@@ -2,11 +2,14 @@ import { useState } from 'react'
 
 const App = () => {
   const [persons, setPersons] = useState([
-    { name: 'Arto Hellas', number: '040-1234567' },
-    { name: 'Ada Lovelace', number: '39-44-5323523' }
+    { name: 'Arto Hellas', number: '040-123456', id: 1 },
+    { name: 'Ada Lovelace', number: '39-44-5323523', id: 2 },
+    { name: 'Dan Abramov', number: '12-43-234345', id: 3 },
+    { name: 'Mary Poppendieck', number: '39-23-6423122', id: 4 }
   ]) 
   const [newName, setNewName] = useState('')
   const [newNumber, setNewNumber] = useState('')
+  const [nameSearch, setNameSearch] = useState('')
 
   const addPerson = (event) => {
     event.preventDefault()
@@ -15,7 +18,8 @@ const App = () => {
     } else {      
       const personObject = {
         name: newName,
-        number: newNumber
+        number: newNumber,
+        id: persons.length + 1
       }
       setPersons(persons.concat(personObject))
       setNewName('')
@@ -31,9 +35,23 @@ const App = () => {
     setNewNumber(event.target.value)
   }
 
+  const personsToShow = nameSearch === '' ? persons : persons.filter(person => person.name.toLowerCase().includes(nameSearch.toLowerCase()))
+
+  const handleNameSearch = (event) => {
+    setNameSearch(event.target.value)
+  }
+
   return (
     <div>
       <h2>Phonebook</h2>
+      <div>
+        filter shown with
+        <input
+          value={nameSearch}
+          onChange={handleNameSearch}
+        />
+      </div>
+      <h2>add a new</h2>
       <form onSubmit={addPerson}>
         <div>
           name:
@@ -54,7 +72,7 @@ const App = () => {
         </div>
       </form>
       <h2>Numbers</h2>
-      {persons.map(person => <div key={person.name}>{person.name} {person.number}</div>)}
+      {personsToShow.map(person => <div key={person.id}>{person.name} {person.number}</div>)}
     </div>
   )
 }
