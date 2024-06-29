@@ -53,6 +53,14 @@ const App = () => {
     setNameSearch(event.target.value)
   }
 
+  const handleDeletePerson = (id) => {
+    const personToDelete = persons.find(p => p.id === id)
+    if (confirm(`Delete ${personToDelete.name} ?`)) {
+      phonebookService.deletePerson(id)
+      setPersons(persons.filter(person => person.id !== id))
+    }
+  }
+
   return (
     <div>
       <h2>Phonebook</h2>
@@ -66,7 +74,7 @@ const App = () => {
         handleNumberChange={handleNumberChange}
       />
       <h2>Numbers</h2>
-      {personsToShow.map(person => <Persons key={person.id} name={person.name} number={person.number} />)}
+      {personsToShow.map(person => <Persons key={person.id} name={person.name} number={person.number} removePerson={() => handleDeletePerson(person.id)} />)}
     </div>
   )
 }
