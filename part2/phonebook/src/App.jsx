@@ -3,12 +3,15 @@ import PersonForm from './components/PersonForm'
 import Persons from './components/Persons'
 import Filter from './components/Filter'
 import phonebookService from './services/phonebook'
+import Notification from './components/Notification'
+import './index.css'
 
 const App = () => {
   const [persons, setPersons] = useState([]) 
   const [newName, setNewName] = useState('')
   const [newNumber, setNewNumber] = useState('')
   const [nameSearch, setNameSearch] = useState('')
+  const [successMessage, setsuccessMessage] = useState(null)
 
   useEffect(() => {
     phonebookService
@@ -30,6 +33,10 @@ const App = () => {
             setPersons(persons.map(person => person.id !== returnedPersonData.id ? person : newPersonData))
             setNewName('')
             setNewNumber('')
+            setsuccessMessage(`Updated ${newName}`)
+            setTimeout(() => {
+              setsuccessMessage(null)
+            }, 5000);
           })
       }
       // alert(`${newName} is already added to phonebook`)
@@ -45,6 +52,10 @@ const App = () => {
           setPersons(persons.concat(returnedPerson))
           setNewName('')
           setNewNumber('')
+          setsuccessMessage(`Added ${newName}`)
+          setTimeout(() => {
+            setsuccessMessage(null)
+          }, 5000);
         })
     }
   }
@@ -74,6 +85,7 @@ const App = () => {
   return (
     <div>
       <h2>Phonebook</h2>
+      <Notification message={successMessage} />
       <Filter nameSearch={nameSearch} handleNameSearch={handleNameSearch} />
       <h2>add a new</h2>
       <PersonForm
