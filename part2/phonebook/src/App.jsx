@@ -11,7 +11,8 @@ const App = () => {
   const [newName, setNewName] = useState('')
   const [newNumber, setNewNumber] = useState('')
   const [nameSearch, setNameSearch] = useState('')
-  const [successMessage, setsuccessMessage] = useState(null)
+  const [showNotification, setShowNotification] = useState(null)
+  const [messageType, setMessageType] = useState(null)
 
   useEffect(() => {
     phonebookService
@@ -33,18 +34,27 @@ const App = () => {
             setPersons(persons.map(person => person.id !== returnedPersonData.id ? person : newPersonData))
             setNewName('')
             setNewNumber('')
-            setsuccessMessage(`Updated ${newName}`)
+            setShowNotification(`Updated ${newName}`)
+            setMessageType('success')
             setTimeout(() => {
-              setsuccessMessage(null)
+              setShowNotification(null)
+            }, 5000);
+          })
+          .catch(error => {
+            setShowNotification(`Information of ${newName} has already been removed from server`)
+            setPersons(persons.filter(person => person.id !== oldPersonData.id))
+            setNewName('')
+            setNewNumber('')
+            setMessageType('error')
+            setTimeout(() => {
+              setShowNotification(null)              
             }, 5000);
           })
       }
-      // alert(`${newName} is already added to phonebook`)
     } else {
       const personObject = {
         name: newName,
         number: newNumber,
-        // id: `${persons.length + 1}`
       }
       phonebookService
         .create(personObject)
@@ -52,9 +62,10 @@ const App = () => {
           setPersons(persons.concat(returnedPerson))
           setNewName('')
           setNewNumber('')
-          setsuccessMessage(`Added ${newName}`)
+          setShowNotification(`Added ${newName}`)
+          setMessageType('success')
           setTimeout(() => {
-            setsuccessMessage(null)
+            setShowNotification(null)
           }, 5000);
         })
     }
@@ -85,7 +96,7 @@ const App = () => {
   return (
     <div>
       <h2>Phonebook</h2>
-      <Notification message={successMessage} />
+      <Notification message={showNotification} messageType={messageType} />
       <Filter nameSearch={nameSearch} handleNameSearch={handleNameSearch} />
       <h2>add a new</h2>
       <PersonForm
