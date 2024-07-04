@@ -1,5 +1,6 @@
 const express = require('express')
 const app = express()
+const morgan = require('morgan')
 
 let phonebook = [
   { 
@@ -25,6 +26,13 @@ let phonebook = [
 ]
 
 app.use(express.json())
+app.use(morgan('tiny'))
+
+morgan.token('person', (req, res) => { 
+  return JSON.stringify(req.body)
+})
+
+const morganDisplay = morgan(':method :url :status :res[content-length] - :response-time ms :person')
 
 app.get('/api/persons', (request, response) => {
   response.json(phonebook)
@@ -59,7 +67,7 @@ const generateID = () => {
   return String(id)
 }
 
-app.post('/api/persons', (request, response) => {
+app.post('/api/persons', morganDisplay, (request, response) => {
   const body = request.body
   const nameCheck = phonebook.find(person => person.name === body.name)
 
