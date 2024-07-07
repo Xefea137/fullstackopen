@@ -99,5 +99,6 @@ app.post('/api/persons', morganDisplay, (request, response) => {
 })
 
 const PORT = process.env.PORT || 3001
-app.listen(PORT)
-console.log(`Server running on post ${PORT}`);
+app.listen(PORT, () => {
+  console.log(`Server running on port ${PORT}`)
+})
