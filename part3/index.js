@@ -47,14 +47,8 @@ app.delete('/api/persons/:id', (request, response) => {
   response.status(204).end()
 })
 
-const generateID = () => {
-  const id = Math.floor(Math.random() * 1000)
-  return String(id)
-}
-
 app.post('/api/persons', morganDisplay, (request, response) => {
   const body = request.body
-  const nameCheck = phonebook.find(person => person.name === body.name)
 
   if (!body.name) {
     return response.status(400).json({
@@ -64,21 +58,17 @@ app.post('/api/persons', morganDisplay, (request, response) => {
     return response.status(400).json({
       error: "Number missing"
     })
-  } else if (nameCheck) {
-    return response.status(400).json({
-      error: "Name must be unique"
-    })
   }
 
-  const person = {
-    id: generateID(),
+  const person = new Person({
     name: body.name,
     number: body.number
-  }
+  })
 
-  phonebook = phonebook.concat(person)
+  person.save().then(savedPerson => {
+    response.json(person)
+  })
 
-  response.json(person)
 })
 
 const PORT = process.env.PORT
