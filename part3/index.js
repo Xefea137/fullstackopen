@@ -1,30 +1,9 @@
+require('dotenv').config()
 const express = require('express')
 const app = express()
 const morgan = require('morgan')
 const cors = require('cors')
-
-let phonebook = [
-  { 
-    "id": "1",
-    "name": "Arto Hellas", 
-    "number": "040-123456"
-  },
-  { 
-    "id": "2",
-    "name": "Ada Lovelace", 
-    "number": "39-44-5323523"
-  },
-  { 
-    "id": "3",
-    "name": "Dan Abramov", 
-    "number": "12-43-234345"
-  },
-  { 
-    "id": "4",
-    "name": "Mary Poppendieck", 
-    "number": "39-23-6423122"
-  }
-]
+const Person = require('./models/person')
 
 app.use(cors())
 app.use(express.static('dist'))
@@ -38,24 +17,27 @@ morgan.token('person', (req, res) => {
 const morganDisplay = morgan(':method :url :status :res[content-length] - :response-time ms :person')
 
 app.get('/api/persons', (request, response) => {
-  response.json(phonebook)
+  Person.find({}).then(person => {
+    response.json(person)    
+  })
 })
 
 app.get('/info', (request, response) => {
-  const length = phonebook.length
   const time = new Date()
-  response.send(`Phonebook has info for ${length} people <br/> ${time}`)
+  Person.find({}).then(person => {
+    response.send(`Phonebook has info for ${person.length} people <br/> ${time}`)
+  })
 })
 
 app.get('/api/persons/:id', (request, response) => {
   const id = request.params.id
-  const person = phonebook.find(person => person.id === id)
-
-  if (person) {
-    response.json(person)
-  } else {
-    response.status(404).end()
-  }
+  const person = Person.find({_id: id}).then(person => {
+    if (person) {
+      response.json(person)
+    } else {
+      response.status(404).end()
+    }
+  })
 })
 
 app.delete('/api/persons/:id', (request, response) => {
@@ -99,7 +81,7 @@ app.post('/api/persons', morganDisplay, (request, response) => {
   response.json(person)
 })
 
-const PORT = process.env.PORT || 3001
+const PORT = process.env.PORT
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`)
 })
