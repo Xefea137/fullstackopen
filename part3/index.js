@@ -86,8 +86,11 @@ app.post('/api/persons', morganDisplay, (request, response, next) => {
 app.put('/api/persons/:id', (request, response, next) => {
   const body = request.body
 
-  console.log('Request body:', body);
-  console.log('Request params id:', body.id);
+  if (!body.number) {
+    return response.status(400).json({
+      error: "Number missing"
+    })
+  }
 
   const person = {
     name: body.name,
