@@ -41,15 +41,20 @@ const App = () => {
             }, 5000);
           })
           .catch(error => {
-            setShowNotification(`Information of ${newName} has already been removed from server`)
-            setPersons(persons.filter(person => person.id !== oldPersonData.id))
+            if (error.response.status === 400) {
+              setShowNotification(error.response.data.error)
+              setMessageType('error')
+            } else {
+              setShowNotification(`Information of ${newName} has already been removed from server`)
+              setPersons(persons.filter(person => person.id !== oldPersonData.id))
+            }
+          
             setNewName('')
             setNewNumber('')
-            setMessageType('error')
             setTimeout(() => {
-              setShowNotification(null)              
-            }, 5000);
-          })
+              setShowNotification(null)
+            }, 5000)
+          })          
       }
     } else {
       const personObject = {
@@ -67,6 +72,13 @@ const App = () => {
           setTimeout(() => {
             setShowNotification(null)
           }, 5000);
+        })
+        .catch(error => {
+          setShowNotification(error.response.data.error)
+          setMessageType('error')
+          setTimeout(() => {
+            setShowNotification(null)
+          }, 5000)
         })
     }
   }
