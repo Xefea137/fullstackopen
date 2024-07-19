@@ -43,14 +43,13 @@ const App = () => {
           .catch(error => {
             if (error.response.status === 400) {
               setShowNotification(error.response.data.error)
-              setMessageType('error')
             } else {
               setShowNotification(`Information of ${newName} has already been removed from server`)
               setPersons(persons.filter(person => person.id !== oldPersonData.id))
+              setNewName('')
+              setNewNumber('')
             }
-          
-            setNewName('')
-            setNewNumber('')
+            setMessageType('error')
             setTimeout(() => {
               setShowNotification(null)
             }, 5000)
