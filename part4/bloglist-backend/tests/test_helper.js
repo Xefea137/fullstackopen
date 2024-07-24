@@ -12,12 +12,6 @@ const initialBlogs = [
     "author": "Two",
     "url": "Second blog.",
     "likes": 20
-  },
-  {
-    "title": "Blog 3",
-    "author": "Three",
-    "url": "Third blog.",
-    "likes": 30
   }
 ]
 
