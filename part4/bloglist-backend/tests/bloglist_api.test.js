@@ -56,7 +56,7 @@ test('successful blog creation', async () => {
   assert(latestBlog.author.includes('Three'))
 })
 
-test('check likes property', async () => {
+test('set likes to 0 if it is missing', async () => {
   const newBlog = {
     "title": "Blog 3",
     "author": "Three",
@@ -70,6 +70,32 @@ test('check likes property', async () => {
     .expect('Content-Type', /application\/json/)
     
   assert.strictEqual(response.body.likes, 0)
+})
+
+test('return 400 if title is missing', async () => {
+  const newBlog = {
+    "author": "Three",
+    "url": "Third blog.",
+    "likes": 30
+  }
+
+  await api
+    .post('/api/blogs')
+    .send(newBlog)
+    .expect(400)
+})
+
+test('return 400 if url is missing', async () => {
+  const newBlog = {
+    "title": "Blog 3",
+    "author": "Three",
+    "likes": 30
+  }
+
+  await api
+    .post('/api/blogs')
+    .send(newBlog)
+    .expect(400)
 })
 
 after(async () => {
