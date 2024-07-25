@@ -54,7 +54,22 @@ test('successful blog creation', async () => {
   const latestBlog = blogAtEnd[blogAtEnd.length -1]
   assert(latestBlog.title.includes('Blog 3'))
   assert(latestBlog.author.includes('Three'))
-  
+})
+
+test('check likes property', async () => {
+  const newBlog = {
+    "title": "Blog 3",
+    "author": "Three",
+    "url": "Third blog."
+  }
+
+  const response = await api
+    .post('/api/blogs')
+    .send(newBlog)
+    .expect(201)
+    .expect('Content-Type', /application\/json/)
+    
+  assert.strictEqual(response.body.likes, 0)
 })
 
 after(async () => {
