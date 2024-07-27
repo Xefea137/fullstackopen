@@ -1,6 +1,6 @@
 const _ = require('lodash')
 
-const dummy = (blogs) => {
+const dummy = () => {
   return 1
 }
 
@@ -22,23 +22,23 @@ const favoriteBlog = (blogs) => {
 }
 
 const mostBlogs = (blogs) => {
-  const authorCount = _.countBy(blogs, 'author');
-  const result = _.maxBy(_.toPairs(authorCount), value => value[1]);
+  const authorCount = _.countBy(blogs, 'author')
+  const result = _.maxBy(_.toPairs(authorCount), value => value[1])
 
   return {
-    "author": result[0],
-    "blogs": result[1]
+    'author': result[0],
+    'blogs': result[1]
   }
 }
 
 const mostLikes = (blogs) => {
-  const authorCount = _.groupBy(blogs, 'author');
+  const authorCount = _.groupBy(blogs, 'author')
   const totalLikes = _.mapValues(authorCount, blog => _.sumBy(blog, 'likes'))
-  const result = _.maxBy(_.toPairs(totalLikes), value => value[1]);
+  const result = _.maxBy(_.toPairs(totalLikes), value => value[1])
 
   return {
-    "author": result[0],
-    "likes": result[1]
+    'author': result[0],
+    'likes': result[1]
   }
 }
 
