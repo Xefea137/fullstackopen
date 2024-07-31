@@ -2,7 +2,9 @@ const blogRouter = require('express').Router()
 const Blog = require('../models/blog')
 
 blogRouter.get('/', async (request, response) => {
-  const blogs = await Blog.find({})
+  const blogs = await Blog
+    .find({})
+    .populate('user', { username: 1, name: 1 })
   response.json(blogs)
 })
 
@@ -16,24 +18,51 @@ blogRouter.get('/:id', async (request, response) => {
 })
 
 blogRouter.post('/', async (request, response) => {
-  const { title, url } = request.body
+  const body = request.body
+  const user = request.user
 
-  if (!title) {
+  if(!user) {
+    return response.status(401).json({ error: 'Token missing or invalid' })
+  }
+
+  if (!body.title) {
     return response.status(400).json({ error: 'Title missing' })
   }
 
-  if (!url) {
+  if (!body.url) {
     return response.status(400).json({ error: 'Url missing' })
   }
 
-  const newBlog = new Blog(request.body)
-  const blog = await newBlog.save()
-  response.status(201).json(blog)
+  const newBlog = new Blog({
+    title: body.title,
+    author: body.author,
+    url: body.url,
+    likes: body.likes,
+    user: user._id
+  })
+
+  const savedBlog = await newBlog.save()
+  user.blogs = user.blogs.concat(savedBlog._id)
+  await user.save()
+
+  response.status(201).json(savedBlog)
 })
 
 blogRouter.delete('/:id', async (request, response) => {
-  await Blog.findByIdAndDelete(request.params.id)
-  response.status(204).end()
+  const user = request.user
+
+  if (!user) {
+    return response.status(401).json({ error: 'Token missing or invalid' })
+  }
+
+  const blog = await Blog.findById(request.params.id)
+
+  if (blog.user.toString() === user._id.toString()) {
+    await Blog.findByIdAndDelete(request.params.id)
+    response.status(204).end()
+  } else {
+    return response.status(401).json({ error: 'Unauthorized to delete blog' })
+  }
 })
 
 blogRouter.put('/:id', async (request, response) => {

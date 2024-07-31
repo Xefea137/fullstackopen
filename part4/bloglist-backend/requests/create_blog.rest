@@ -1,11 +1,25 @@
 POST http://localhost:3003/api/blogs/
 content-type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IlVzZXJPbmUiLCJpZCI6IjY2YTc1MGNiZTdhZmU2ZmYxNWFlMjJmYSIsImlhdCI6MTcyMjI1MDk0NX0.TykJs3NgNg4Zqofi06UgZ3XH-NWXp8HBGWq1OQI0SWY
+
+{
+  "title": "Blog 111",
+  "author": "OneOneOne",
+  "url": "111 blog.",
+  "likes": 111
+}
+
+
+###
+POST http://localhost:3003/api/blogs/
+content-type: application/json
 
 {
   "title": "Blog 1",
   "author": "One",
   "url": "First blog.",
-  "likes": 10
+  "likes": 10,
+  "userId": "66a750cde7afe6ff15ae22fc"
 }
 
 ###
@@ -16,7 +30,8 @@ content-type: application/json
   "title": "Blog 2",
   "author": "Two",
   "url": "Second blog.",
-  "likes": 20
+  "likes": 20,
+  "userId": "66a750cde7afe6ff15ae22fc"
 }
 
 ###
@@ -27,5 +42,17 @@ content-type: application/json
   "title": "Blog 3",
   "author": "Three",
   "url": "Third blog.",
-  "likes": 30
+  "likes": 30,
+  "userId": "66a750cbe7afe6ff15ae22fa"
+}
+
+###
+POST http://localhost:3003/api/blogs/
+content-type: application/json
+
+{
+  "title": "Blog 4",
+  "author": "Four",
+  "url": "Fourth blog.",
+  "userId": "66a750cbe7afe6ff15ae22fa"
 }
