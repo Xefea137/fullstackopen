@@ -12,6 +12,7 @@ const App = () => {
   const [newAuthor, setNewAuthor] = useState('')
   const [newUrl, setNewUrl] = useState('')
   const [showNotification, setShowNotification] = useState({ message: null, type: null })
+  const [createBlogVisable, setCreateBlogVisable] = useState(false)
 
   useEffect(() => {
     blogService
@@ -82,39 +83,52 @@ const App = () => {
     )
   }
 
-  const blogForm = () => (
-    <form onSubmit={addBlog}>
-      <h2>Create new</h2>
+  const blogForm = () => {
+    const hideWhenVisible = { display: createBlogVisable ? 'none' : '' }
+    const showWhenVisible = { display: createBlogVisable ? '' : 'none'}
+
+    return (
       <div>
-        Title:
-        <input
-          type='text'
-          value={newTitle}
-          name='title'
-          onChange={handleTitleChange}
-        />
+        <div style={hideWhenVisible}>
+          <button onClick={() => setCreateBlogVisable(true)}>New blog</button>
+        </div>
+        <div style={showWhenVisible}>
+          <form onSubmit={addBlog}>
+            <h2>Create new</h2>
+            <div>
+              Title:
+              <input
+                type='text'
+                value={newTitle}
+                name='title'
+                onChange={handleTitleChange}
+              />
+            </div>
+            <div>
+              Author:
+              <input
+                type='text'
+                value={newAuthor}
+                name='author'
+                onChange={handleAuthorChange}
+              />
+            </div>
+            <div>
+              Url:
+              <input
+                type='text'
+                value={newUrl}
+                name='url'
+                onChange={handleUrlChange}
+              />
+            </div>
+            <button type='submit'>create</button>
+          </form>
+          <button onClick={() => setCreateBlogVisable(false)}>Cancel</button>
+        </div>
       </div>
-      <div>
-        Author:
-        <input
-          type='text'
-          value={newAuthor}
-          name='author'
-          onChange={handleAuthorChange}
-        />
-      </div>
-      <div>
-        Url:
-        <input
-          type='text'
-          value={newUrl}
-          name='url'
-          onChange={handleUrlChange}
-        />
-      </div>
-      <button type='submit'>create</button>
-    </form>
-  )
+    )
+  }
 
   const addBlog = (event) => {
     event.preventDefault()
