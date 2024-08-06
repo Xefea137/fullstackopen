@@ -29,7 +29,7 @@ const BlogForm = ({ createBlog }) => {
     setNewUrl(event.target.value)
   }
 
-  return(
+  return (
     <form onSubmit={addBlog}>
       <h2>Create new</h2>
       <div>
