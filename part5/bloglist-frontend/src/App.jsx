@@ -19,8 +19,8 @@ const App = () => {
       .then(blogs => {
         blogs.sort((a, b) => b.likes - a.likes)
         setBlogs(blogs)
-      } 
-    )
+      }
+      )
   }, [])
 
   useEffect(() => {
@@ -37,15 +37,15 @@ const App = () => {
       const user = await loginService.login({
         username, password
       })
-  
+
       window.localStorage.setItem(
         'loggedBlogappUser', JSON.stringify(user)
       )
-  
+
       blogService.setToken(user.token)
       setUser(user)
     } catch (exception) {
-      setShowNotification({ message: exception.response.data.error, type: 'error' }) 
+      setShowNotification({ message: exception.response.data.error, type: 'error' })
       setTimeout(() => {
         setShowNotification({ message: null, type: null })
       }, 5000)
@@ -58,10 +58,10 @@ const App = () => {
       .create(blogObject)
       .then(returnedBlog => {
         setBlogs(blogs.concat(returnedBlog))
-        setShowNotification({ message: `A new blog ${blogObject.title} by ${blogObject.author} added`, type: 'success' }) 
+        setShowNotification({ message: `A new blog ${blogObject.title} by ${blogObject.author} added`, type: 'success' })
         setTimeout(() => {
           setShowNotification({ message: null, type: null })
-      }, 5000)
+        }, 5000)
       })
   }
 
@@ -72,7 +72,7 @@ const App = () => {
 
   const removeBlog = async (id) => {
     await blogService.remove(id)
-    setBlogs(blogs.filter(blog => blog.id !=id))
+    setBlogs(blogs.filter(blog => blog.id !== id))
   }
 
   const handleLogout = () => {
@@ -85,16 +85,16 @@ const App = () => {
       <Notification message={showNotification.message} type={showNotification.type} />
       {!user && <LoginForm handleLogin={handleLogin} />}
       {user && (
-      <div>
-        <h2>blogs</h2>
-        <p>{user.name} logged in <button onClick={handleLogout}>logout</button></p>
-        <Togglable buttonLabel='New blog' ref={blogFormRef}>
-          <BlogForm createBlog={addBlog} />
-        </Togglable>
-        {blogs.map(blog => (
-          <Blog key={blog.id} blog={blog} addLikes={addLikes} removeBlog={removeBlog} user={user} />
-        ))}
-      </div>
+        <div>
+          <h2>blogs</h2>
+          <p>{user.name} logged in <button onClick={handleLogout}>logout</button></p>
+          <Togglable buttonLabel='New blog' ref={blogFormRef}>
+            <BlogForm createBlog={addBlog} />
+          </Togglable>
+          {blogs.map(blog => (
+            <Blog key={blog.id} blog={blog} addLikes={addLikes} removeBlog={removeBlog} user={user} />
+          ))}
+        </div>
       )}
     </div>
   )
