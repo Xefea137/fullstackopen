@@ -34,11 +34,11 @@ const Blog = ({ blog, addLikes, removeBlog, user }) => {
   }
 
   return (
-    <div style={blogStyle}>
-      <div style={showSomeDetails}>
+    <div style={blogStyle} className='blog'>
+      <div style={showSomeDetails} className='beforeView'>
         {blog.title} {blog.author} <button onClick={handleBlogView}>View</button>
       </div>
-      <div style={showAllDetails}>
+      <div style={showAllDetails} data-testid='afterView'>
         <div>{blog.title} {blog.author} <button onClick={handleBlogView}>Hide</button></div>
         <div>{blog.url}</div>
         <div>{blog.likes} <button onClick={handleLike}>Like</button></div>
