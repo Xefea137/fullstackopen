@@ -41,7 +41,7 @@ const Blog = ({ blog, addLikes, removeBlog, user }) => {
       <div style={showAllDetails} data-testid='afterView'>
         <div>{blog.title} {blog.author} <button onClick={handleBlogView}>Hide</button></div>
         <div>{blog.url}</div>
-        <div>{blog.likes} <button onClick={handleLike}>Like</button></div>
+        <div data-testid='like'>{blog.likes} <button onClick={handleLike}>Like</button></div>
         <div>{blog.user.name}</div>
         {user.username === blog.user.username && <button onClick={handleDelete}>Delete</button>}
       </div>
