@@ -1,0 +1,14 @@
+POST http://localhost:3003/api/blogs/66d83609cee9ae2f8cf02745/comments
+Content-Type: application/json
+
+{
+  "comment": "This is a test comment."
+}
+
+###
+POST http://localhost:3003/api/blogs/66d83609cee9ae2f8cf02745/comments
+Content-Type: application/json
+
+{
+  "comment": "This is a 2nd test comment."
+}

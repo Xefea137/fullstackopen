@@ -1,32 +1,20 @@
-import { useState } from 'react'
+import useField from '../hooks/useField'
 
 const BlogForm = ({ createBlog }) => {
-  const [newTitle, setNewTitle] = useState('')
-  const [newAuthor, setNewAuthor] = useState('')
-  const [newUrl, setNewUrl] = useState('')
+  const { reset: resetTitle, ...title } = useField('text')
+  const { reset: resetAuthor, ...author } = useField('text')
+  const { reset: resetUrl, ...url } = useField('text')
 
   const addBlog = (event) => {
     event.preventDefault()
     createBlog({
-      title: newTitle,
-      author: newAuthor,
-      url: newUrl,
+      title: title.value,
+      author: author.value,
+      url: url.value,
     })
-    setNewTitle('')
-    setNewAuthor('')
-    setNewUrl('')
-  }
-
-  const handleTitleChange = (event) => {
-    setNewTitle(event.target.value)
-  }
-
-  const handleAuthorChange = (event) => {
-    setNewAuthor(event.target.value)
-  }
-
-  const handleUrlChange = (event) => {
-    setNewUrl(event.target.value)
+    resetTitle()
+    resetAuthor()
+    resetUrl()
   }
 
   return (
@@ -35,33 +23,27 @@ const BlogForm = ({ createBlog }) => {
       <div>
         Title:
         <input
+          {...title}
           data-testid="title"
-          type="text"
-          value={newTitle}
           name="title"
-          onChange={handleTitleChange}
           placeholder="add title here"
         />
       </div>
       <div>
         Author:
         <input
+          {...author}
           data-testid="author"
-          type="text"
-          value={newAuthor}
           name="author"
-          onChange={handleAuthorChange}
           placeholder="add author here"
         />
       </div>
       <div>
         Url:
         <input
+          {...url}
           data-testid="url"
-          type="text"
-          value={newUrl}
           name="url"
-          onChange={handleUrlChange}
           placeholder="add url here"
         />
       </div>

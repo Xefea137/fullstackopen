@@ -33,34 +33,3 @@ export const setNotification = (message, type) => {
 }
 
 export default notificationSlice.reducer
-
-/*
-const notificationReducer = (state = initialState, action) => {
-  switch (action.type) {
-  case 'SHOW_NOTIFICATION':
-    return action.payload
-  case 'HIDE_NOTIFICATION':
-    return initialState
-  default:
-    return state
-  }
-}
-
-export const showNotification = ({ type, message }) => {
-  return {
-    type: 'SHOW_NOTIFICATION',
-    payload: {
-      type,
-      message
-    }
-  }
-}
-
-export const hideNotification = () => {
-  return {
-    type: 'HIDE_NOTIFICATION'
-  }
-}
-
-export default notificationReducer
-*/

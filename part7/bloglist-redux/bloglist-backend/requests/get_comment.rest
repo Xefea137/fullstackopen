@@ -1,0 +1,4 @@
+GET http://localhost:3003/api/blogs/66d83609cee9ae2f8cf02745/comments/
+
+###
+GET http://localhost:3003/api/blogs/66a75109e7afe6ff15ae2307/comments/

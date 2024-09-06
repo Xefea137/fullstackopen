@@ -1,8 +1,16 @@
 import { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
+import { useDispatch } from 'react-redux'
+import blogService from '../services/blogs'
+import loginService from '../services/login'
+import { setNotification } from '../reducers/notificationReducer'
+import { setUser } from '../reducers/userReducer'
 
-const LoginForm = ({ handleLogin }) => {
+const LoginForm = () => {
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
+  const navigate = useNavigate()
+  const dispatch = useDispatch()
 
   const onSubmit = (event) => {
     event.preventDefault()
@@ -10,6 +18,7 @@ const LoginForm = ({ handleLogin }) => {
       username,
       password,
     })
+    navigate('/')
     setUsername('')
     setPassword('')
   }
@@ -20,6 +29,22 @@ const LoginForm = ({ handleLogin }) => {
 
   const handlePasswordChange = (event) => {
     setPassword(event.target.value)
+  }
+
+  const handleLogin = async ({ username, password }) => {
+    try {
+      const user = await loginService.login({
+        username,
+        password,
+      })
+
+      window.localStorage.setItem('loggedBlogappUser', JSON.stringify(user))
+
+      blogService.setToken(user.token)
+      dispatch(setUser(user))
+    } catch (exception) {
+      dispatch(setNotification(exception.response.data.error, 'error'))
+    }
   }
 
   return (

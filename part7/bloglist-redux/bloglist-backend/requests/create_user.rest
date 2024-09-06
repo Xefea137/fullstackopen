@@ -3,7 +3,7 @@ content-type: application/json
 
 {
   "username": "UserOne",
-  "name": "Person One",
+  "name": "Lionel Messi",
   "password": "PasswordOne"
 }
 
@@ -13,6 +13,6 @@ content-type: application/json
 
 {
   "username": "UserTwo",
-  "name": "Person Two",
+  "name": "Cristiano Ronaldo",
   "password": "PasswordTwo"
 }

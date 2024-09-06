@@ -1,8 +1,9 @@
 const blogRouter = require('express').Router()
 const Blog = require('../models/blog')
+const Comment = require('../models/comments')
 
 blogRouter.get('/', async (request, response) => {
-  const blogs = await Blog.find({}).populate('user', { username: 1, name: 1 })
+  const blogs = await Blog.find({}).populate('user', { username: 1, name: 1 }).populate('comments', { comment: 1 })
   response.json(blogs)
 })
 
@@ -82,6 +83,32 @@ blogRouter.put('/:id', async (request, response) => {
   }).populate('user', { name: 1, username: 1 })
 
   response.json(updatedBlog)
+})
+
+blogRouter.get('/:id/comments', async (request, response) => {
+  const blog = await Blog.findById(request.params.id).populate('comments')
+  response.json(blog.comments)
+})
+
+blogRouter.post('/:id/comments', async (request, response) => {
+  const { comment } = request.body
+  console.log('request.body')
+  const blog = await Blog.findById(request.params.id)
+
+  if (!comment) {
+    return response.status(400).json({ error: 'Empty comment' })
+  }
+
+  const newComment = new Comment({
+    comment: comment,
+    blog: blog._id
+  })
+
+  const savedComment = await newComment.save()
+  blog.comments = blog.comments.concat(savedComment)
+  await blog.save()
+  
+  response.status(201).json(savedComment)
 })
 
 module.exports = blogRouter
