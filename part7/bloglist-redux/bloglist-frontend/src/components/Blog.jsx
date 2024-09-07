@@ -1,23 +1,23 @@
+import { Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from '@mui/material'
 import { useSelector } from 'react-redux'
 import { Link } from 'react-router-dom'
 
 const Blog = () => {
   const blogs = useSelector(state => state.blogs)
 
-  const blogStyle = {
-    paddingTop: 10,
-    paddingLeft: 2,
-    border: 'solid',
-    borderWidth: 1,
-    marginBottom: 5,
-  }
-
   return (
-    <div>
-      {blogs.map(blog =>
-        <div key={blog.id} style={blogStyle}><Link to={`/blogs/${blog.id}`}>{blog.title} by {blog.author}</Link></div>
-      )}
-    </div>
+    <TableContainer component={Paper}>
+      <Table>
+        <TableBody>
+          {blogs.map(blog => (
+            <TableRow key={blog.id}>
+              <TableCell><Link to={`/blogs/${blog.id}`}>{blog.title}</Link></TableCell>
+              <TableCell>{blog.author}</TableCell>
+            </TableRow>
+          ))}
+        </TableBody>
+      </Table>
+    </TableContainer>
   )
 }
 

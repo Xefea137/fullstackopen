@@ -1,3 +1,4 @@
+import { Button, TextField, Typography } from '@mui/material'
 import useField from '../hooks/useField'
 
 const BlogForm = ({ createBlog }) => {
@@ -19,35 +20,42 @@ const BlogForm = ({ createBlog }) => {
 
   return (
     <form onSubmit={addBlog} className="formDiv">
-      <h2>Create new</h2>
+      <Typography variant='h4' gutterBottom>Create new</Typography>
       <div>
-        Title:
-        <input
+        <TextField
+          label='Title'
           {...title}
           data-testid="title"
           name="title"
           placeholder="add title here"
+          variant='outlined'
+          fullWidth
         />
       </div>
       <div>
-        Author:
-        <input
+        <TextField
+          label='Author'
           {...author}
           data-testid="author"
           name="author"
           placeholder="add author here"
+          variant='outlined'
+          fullWidth
+          sx={{ marginTop:1, marginBottom: 1 }}
         />
       </div>
       <div>
-        Url:
-        <input
+        <TextField
+          label='Url'
           {...url}
           data-testid="url"
           name="url"
           placeholder="add url here"
+          variant='outlined'
+          fullWidth
         />
       </div>
-      <button type="submit">Create</button>
+      <Button variant='contained' color='primary' type='submit' sx={{ marginTop:1, marginBottom: 1 }}>Create</Button>
     </form>
   )
 }

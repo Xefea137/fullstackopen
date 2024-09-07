@@ -4,6 +4,9 @@ import { useNavigate, useParams } from 'react-router-dom'
 import { deleteBlog, updateBlog } from '../reducers/blogReducer'
 import { initializeComments, resetComment } from '../reducers/commentReducer'
 import AddCommentForm from './AddCommentForm'
+import { Button, List, ListItem, ListItemButton, ListItemIcon, ListItemText, Typography } from '@mui/material'
+import DeleteIcon from '@mui/icons-material/Delete'
+import TripOriginIcon from '@mui/icons-material/TripOrigin'
 
 const BlogDetail = () => {
   const blogs = useSelector(state => state.blogs)
@@ -43,20 +46,37 @@ const BlogDetail = () => {
 
   return (
     <div>
-      <h1>{blog.title} by {blog.author}</h1>
-      <a href={blog.url}>{blog.url}</a>
-      <div>{blog.likes} likes <button onClick={handleLike}>Like</button></div>
-      <div>Added by {blog.user.name}</div>
+      <Typography variant='h3'>{blog.title} by {blog.author}</Typography>
+      <Typography component="a" href={blog.url} target='_blank'>{blog.url}</Typography>
+      <Typography variant='body1' sx={{ marginBottom: 1, marginTop: 1 }}>
+        {blog.likes} likes <Button variant='contained' color='primary' size='small' onClick={handleLike}>Like</Button>
+      </Typography>
+      <Typography variant='body1' gutterBottom>Added by {blog.user.name}</Typography>
       {user.username === blog.user.username && (
-        <button onClick={handleDelete}>Delete</button>
+        <Button
+          variant='contained'
+          color='primary'
+          startIcon={<DeleteIcon />}
+          onClick={handleDelete}
+          size='small'
+          sx={{ backgroundColor: '#ff8b94' }}>
+          Delete
+        </Button>
       )}
-      <h3>Comments</h3>
+      <Typography variant='h5' sx={{ marginTop: 3 }}>Comments</Typography>
       <AddCommentForm id={id} />
-      <ul>
-        {comments.map(comment =>
-          <li key={comment.id}>{comment.comment}</li>
-        )}
-      </ul>
+      <List>
+        {comments.map(comment => (
+          <ListItem key={comment.id} disablePadding>
+            <ListItemButton>
+              <ListItemIcon>
+                <TripOriginIcon fontSize='small' />
+              </ListItemIcon>
+              <ListItemText>{comment.comment}</ListItemText>
+            </ListItemButton>
+          </ListItem>
+        ))}
+      </List>
     </div>
   )
 }

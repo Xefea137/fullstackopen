@@ -5,6 +5,7 @@ import blogService from '../services/blogs'
 import loginService from '../services/login'
 import { setNotification } from '../reducers/notificationReducer'
 import { setUser } from '../reducers/userReducer'
+import { Box, Button, Container, TextField, Typography } from '@mui/material'
 
 const LoginForm = () => {
   const [username, setUsername] = useState('')
@@ -12,9 +13,9 @@ const LoginForm = () => {
   const navigate = useNavigate()
   const dispatch = useDispatch()
 
-  const onSubmit = (event) => {
+  const onSubmit = async (event) => {
     event.preventDefault()
-    handleLogin({
+    await handleLogin({
       username,
       password,
     })
@@ -48,32 +49,53 @@ const LoginForm = () => {
   }
 
   return (
-    <div>
-      <h2>Log in to application</h2>
-      <form onSubmit={onSubmit}>
-        <div>
-          username
-          <input
-            data-testid="username"
-            type="text"
-            value={username}
-            name="username"
-            onChange={handleUsernameChange}
-          />
-        </div>
-        <div>
-          password
-          <input
-            data-testid="password"
-            type="password"
-            value={password}
-            name="password"
-            onChange={handlePasswordChange}
-          />
-        </div>
-        <button type="submit">Login</button>
-      </form>
-    </div>
+    <Container maxWidth='sm'>
+      <Box
+        display="flex"
+        flexDirection="column"
+        justifyContent="center"
+        alignItems="center"
+        sx={{
+          color: 'primary.main',
+          border: 1,
+          borderColor: '#61f4de',
+          borderRadius: 1,
+          padding: 3,
+          backgroundColor: '#f5f5f5',
+          boxShadow: 5,
+          mx: 'auto',
+          textAlign: 'center'
+        }}
+      >
+        <Typography variant='h3' sx={{ marginBottom: 5 }}>Log in to application</Typography>
+        <form onSubmit={onSubmit}>
+          <div>
+            <TextField
+              label='Username'
+              type='text'
+              value={username}
+              name='username'
+              onChange={handleUsernameChange}
+              variant='outlined'
+              data-testid='username'
+            />
+          </div>
+          <div>
+            <TextField
+              label='Password'
+              type='password'
+              value={password}
+              name='password'
+              onChange={handlePasswordChange}
+              variant='outlined'
+              data-testid='password'
+              sx={{ marginTop:1, marginBottom: 1 }}
+            />
+          </div>
+          <Button variant='contained' color='primary' fullWidth type='submit' >Login</Button>
+        </form>
+      </Box>
+    </Container>
   )
 }
 

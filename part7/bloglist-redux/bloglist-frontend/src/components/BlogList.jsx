@@ -6,7 +6,7 @@ import Togglable from './Togglable'
 import { setNotification } from '../reducers/notificationReducer'
 import { createBlog } from '../reducers/blogReducer'
 
-const HomePage = () => {
+const BlogList = () => {
   const dispatch = useDispatch()
   const blogFormRef = useRef()
 
@@ -26,4 +26,4 @@ const HomePage = () => {
   )
 }
 
-export default HomePage
+export default BlogList

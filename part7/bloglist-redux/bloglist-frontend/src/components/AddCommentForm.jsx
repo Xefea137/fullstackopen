@@ -1,6 +1,7 @@
 import { useDispatch } from 'react-redux'
 import { createComment } from '../reducers/commentReducer'
 import useField from '../hooks/useField'
+import { Button, TextField } from '@mui/material'
 
 const AddCommentForm = ({ id }) => {
   const { reset: resetComment, ...comment } = useField('text')
@@ -17,11 +18,15 @@ const AddCommentForm = ({ id }) => {
   return (
     <div>
       <form onSubmit={onSubmit}>
-        <input
+        <TextField
           {...comment}
           placeholder='add comment here'
+          variant='outlined'
+          fullWidth
+          color="secondary"
+          sx={{ marginBottom: .5 }}
         />
-        <button type='submit'>Add comment</button>
+        <Button variant='contained' color='primary' type='submit' size='small'>Add comment</Button>
       </form>
     </div>
   )

@@ -28,6 +28,10 @@ blogRouter.post('/', async (request, response) => {
     return response.status(400).json({ error: 'Title missing' })
   }
 
+  if (!body.author) {
+    return response.status(400).json(({ error: 'Author missing' }))
+  }
+
   if (!body.url) {
     return response.status(400).json({ error: 'Url missing' })
   }
@@ -61,6 +65,7 @@ blogRouter.delete('/:id', async (request, response) => {
   const blog = await Blog.findById(request.params.id)
 
   if (blog.user.toString() === user._id.toString()) {
+    await Comment.deleteMany({ blog: blog._id })    
     await Blog.findByIdAndDelete(request.params.id)
     response.status(204).end()
   } else {

@@ -11,6 +11,7 @@ import { initializeBlogs } from './reducers/blogReducer'
 import { initializeUser } from './reducers/userReducer'
 import { initializeAllUsers } from './reducers/allUsersReducer'
 import Menu from './components/Menu'
+import { Container, Typography } from '@mui/material'
 
 const App = () => {
   const dispatch = useDispatch()
@@ -24,9 +25,9 @@ const App = () => {
   }, [dispatch])
 
   return (
-    <div>
+    <Container>
       <Menu />
-      <h1>Blog App</h1>
+      <Typography variant='h3' sx={{ textAlign: 'center', fontWeight: 'bold', color: 'primary.main' }} gutterBottom>Blog App</Typography>
       <Notification
         message={currentNotification.message}
         type={currentNotification.type}
@@ -38,7 +39,7 @@ const App = () => {
         <Route path='/users/:id' element={<SingleUserBlogList /> } />
         <Route path='/login' element={!loggedUser ? <LoginForm /> : <Navigate replace to='/' /> } />
       </Routes>
-    </div>
+    </Container>
   )
 }
 
