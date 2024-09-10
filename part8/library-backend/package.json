@@ -3,7 +3,8 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "nodemon index.js"
   },
   "author": "Xefea",
   "license": "ISC",
@@ -11,5 +12,8 @@
   "dependencies": {
     "@apollo/server": "^4.11.0",
     "graphql": "^16.9.0"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.4"
   }
 }

@@ -1,6 +1,7 @@
 const { ApolloServer } = require('@apollo/server')
 const { startStandaloneServer } = require('@apollo/server/standalone')
 const { v1: uuid } = require('uuid')
+const { GraphQLError } = require('graphql')
 
 let authors = [
   {
@@ -19,20 +20,14 @@ let authors = [
     born: 1821
   },
   { 
-    name: 'Joshua Kerievsky', // birthyear not known
+    name: 'Joshua Kerievsky',
     id: "afa5b6f2-344d-11e9-a414-719c6709cf3e",
   },
   { 
-    name: 'Sandi Metz', // birthyear not known
+    name: 'Sandi Metz',
     id: "afa5b6f3-344d-11e9-a414-719c6709cf3e",
   },
 ]
-
-/*
- * English:
- * It might make more sense to associate a book with its author by storing the author's id in the context of the book instead of the author's name
- * However, for simplicity, we will store the author's name in connection with the book
-*/
 
 let books = [
   {
@@ -86,10 +81,6 @@ let books = [
   },
 ]
 
-/*
-  you can remove the placeholder query once your first one has been implemented 
-*/
-
 const typeDefs = `
 type Author {
   name: String!
@@ -123,7 +114,6 @@ type Book {
     addAuthor(
       name: String!
       born: Int
-      id: ID!    
     ): Author
     editAuthor(
       name: String!
@@ -156,20 +146,45 @@ const resolvers = {
   },
   Mutation: {
     addBook: (root, args) => {
+      if (!args.title || !args.author || !args.published || args.genres.length === 0) {
+        throw new GraphQLError('All data must be provided!', {
+          extensions: {
+            code: 'BAD_USER_INPUT',
+          }
+        })
+      }
+
       if (!authors.find(a => a.name === args.author)) {
         const author = { name: args.author, id: uuid() }
         authors = authors.concat(author)
       }
+
       const book = { ...args, id: uuid() }
       books = books.concat(book)
       return book
     },
     addAuthor: (root, args) => {
+      if (!args.name) {
+        throw new GraphQLError('Enter authors name!', {
+          extensions: {
+            code: 'BAD_USER_INPUT'
+          }
+        })
+      }
+
       const author = { ...args, id: uuid() }
       authors = authors.concat(author)
       return author
     },
     editAuthor: (root, args) => {
+      if (!args.name || !args.setBornTo) {
+        throw new GraphQLError('Provide all data!', {
+          extensions: {
+            code: 'BAD_USER_INPUT'
+          }
+        })
+      }
+
       const author = authors.find(a => a.name === args.name)
       if (!author) {
         return null
