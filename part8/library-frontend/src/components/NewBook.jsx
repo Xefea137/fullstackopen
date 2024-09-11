@@ -25,8 +25,6 @@ const NewBook = ({ setNotify }) => {
 
     createBook({ variables: { title, author, published: +published, genres }})
 
-    console.log('add book...')
-
     setTitle('')
     setPublished('')
     setAuthor('')

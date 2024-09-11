@@ -1,8 +1,9 @@
 import { useMutation } from "@apollo/client"
 import { useEffect, useState } from "react"
 import { ALL_AUTHORS, UPDATE_AUTHOR } from "../queries"
+import Select from 'react-select'
 
-const SetBirthyear = ({ setNotify }) => {
+const SetBirthyear = ({ authors, setNotify }) => {
   const [name, setName] = useState('')
   const [born, setBorn] = useState('')
 
@@ -31,17 +32,16 @@ const SetBirthyear = ({ setNotify }) => {
       setNotify('Author not found', 'red')
     }
   }, [result.data])
-
+  
+  const authorOptions = authors.map(a => ({value :a.name, label: a.name}))
+  
   return (
     <div>
       <h2>Set birthyear</h2>
       <form onSubmit={submit}>
         <div>
           Name
-          <input
-            value={name}
-            onChange={({ target }) => setName(target.value)}
-          />
+          <Select options={authorOptions} onChange={({ value }) => setName(value)}></Select>
         </div>
         <div>
           Born

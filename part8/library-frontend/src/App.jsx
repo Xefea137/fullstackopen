@@ -6,9 +6,9 @@ import { useQuery } from "@apollo/client";
 import { ALL_AUTHORS, ALL_BOOKS } from "./queries";
 import Notification from "./components/Notification";
 import SetBirthyear from "./components/SetBirthyear";
+import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom'
 
 const App = () => {
-  const [page, setPage] = useState("authors");
   const [showNotification, setShowNotification] = useState({ message: null, type: null })
 
 
@@ -27,28 +27,28 @@ const App = () => {
     setShowNotification({ message, type })
     setTimeout(() => {
       setShowNotification({ message: null, type: null })      
-    }, 2000);
+    }, 5000);
   }
 
   return (
-    <div>
+    <Router>
       <div>
-        <button onClick={() => setPage("authors")}>Authors</button>
-        <button onClick={() => setPage("books")}>Books</button>
-        <button onClick={() => setPage("add")}>Add book</button>
+        <Link style={{ padding: 5 }} to='/'>Authors</Link>
+        <Link style={{ padding: 5 }} to='/books'>Books</Link>
+        <Link style={{ padding: 5 }} to='/add-books'>Add book</Link>
+        <Notification errorMessage={showNotification.message} errorType={showNotification.type} />
       </div>
-
-      <Notification errorMessage={showNotification.message} errorType={showNotification.type} />
-
-      {page === 'authors' && (
-        <div>
-          <Authors authors={authorsResult.data.allAuthors} />
-          <SetBirthyear setNotify={notify}/>
-        </div>
-        )}
-      {page === 'books' && <Books books={booksResult.data.allBooks} />}
-      {page === 'add' && <NewBook setNotify={notify}/>}
-    </div>
+      <Routes>
+        <Route path="/" element={
+          <>
+            <Authors authors={authorsResult.data.allAuthors} />
+            <SetBirthyear authors={authorsResult.data.allAuthors} setNotify={notify}/>
+          </>
+        } />
+        <Route path="/books" element={<Books books={booksResult.data.allBooks} />} />
+        <Route path="/add-books" element={<NewBook setNotify={notify} />} />
+      </Routes>
+    </Router>
   );
 };
 
