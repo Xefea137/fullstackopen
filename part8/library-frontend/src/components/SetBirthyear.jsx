@@ -8,21 +8,26 @@ const SetBirthyear = ({ authors, setNotify }) => {
   const [born, setBorn] = useState('')
 
   const [editAuthor, result] = useMutation(UPDATE_AUTHOR, {
-    refetchQueries: [{ query: ALL_AUTHORS }],
     onError: (error) => {
       const message = error.graphQLErrors.map(e => e.message)
       setNotify(message, 'red')
     },
     onCompleted: () => {
       setNotify('Birth year set successfully!', 'green')
+    },
+    update: (cache, response) => {
+      cache.updateQuery({ query: ALL_AUTHORS }, ({ allAuthors }) => {
+        const updatedAuthor = response.data.editAuthor
+        return {
+          allAuthors: allAuthors.map(a => a.id === updatedAuthor.id ? updatedAuthor : a)
+        }
+      })
     }
   })
 
   const submit = (event) => {
     event.preventDefault()
-
     editAuthor({ variables: {name, setBornTo: +born }})
-
     setName('')
     setBorn('')
   }

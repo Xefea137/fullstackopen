@@ -1,7 +1,7 @@
 const Authors = ({ authors }) => {
-  /*if (!authors) {
+  if (!authors) {
     return null
-  }*/
+  }
 
   return (
     <div>

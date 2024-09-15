@@ -1,6 +1,6 @@
 import { useMutation } from '@apollo/client'
 import { useState } from 'react'
-import { ALL_BOOKS, CREATE_BOOK } from '../queries'
+import { ALL_AUTHORS, ALL_BOOKS, CREATE_BOOK } from '../queries'
 
 const NewBook = ({ setNotify }) => {
   const [title, setTitle] = useState('')
@@ -10,26 +10,24 @@ const NewBook = ({ setNotify }) => {
   const [genres, setGenres] = useState([])
 
   const [createBook] = useMutation(CREATE_BOOK, {
-    refetchQueries: [{ query: ALL_BOOKS }],
+    refetchQueries: [{ query: ALL_BOOKS }, { query: ALL_AUTHORS }],
     onError: (error) => {
       const message = error.graphQLErrors.map(e => e.message).join('\n')
       setNotify(message, 'red')
     },
     onCompleted: () => {
       setNotify('Book added successfully!', 'green')
+      setTitle('')
+      setPublished('')
+      setAuthor('')
+      setGenres([])
+      setGenre('')
     }
   })
 
   const submit = async (event) => {
     event.preventDefault()
-
-    createBook({ variables: { title, author, published: +published, genres }})
-
-    setTitle('')
-    setPublished('')
-    setAuthor('')
-    setGenres([])
-    setGenre('')
+    createBook({ variables: { title, author, published: +published, genres }})    
   }
 
   const addGenre = () => {
