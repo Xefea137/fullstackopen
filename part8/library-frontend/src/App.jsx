@@ -2,13 +2,14 @@ import { useEffect, useState } from "react";
 import Authors from "./components/Authors";
 import Books from "./components/Books";
 import NewBook from "./components/NewBook";
-import { useApolloClient, useQuery } from "@apollo/client";
-import { ALL_AUTHORS, ALL_BOOKS, ME } from "./queries";
+import { useApolloClient, useQuery, useSubscription } from "@apollo/client";
+import { ALL_AUTHORS, ALL_BOOKS, BOOK_ADDED, ME } from "./queries";
 import Notification from "./components/Notification";
 import SetBirthyear from "./components/SetBirthyear";
 import { Routes, Route, Link, useNavigate } from 'react-router-dom'
 import LoginForm from "./components/LoginForm";
 import Recommend from "./components/Recommend";
+import UpdateCache from "./components/UpdateCache"
 
 const App = () => {
   const [showNotification, setShowNotification] = useState({ message: null, type: null })
@@ -27,6 +28,15 @@ const App = () => {
       setToken(savedToken)
     }
   }, [])
+
+  useSubscription(BOOK_ADDED, {
+    onData: ({ data, client }) => {
+      console.log(data)
+      const addedBook = data.data.bookAdded
+      window.alert(`New book '${addedBook.title}' added`)
+      UpdateCache(client.cache, { query: ALL_BOOKS }, addedBook)
+    }
+  })
 
   if (authorsResult.loading) {
     return <div>Loading...</div>
@@ -75,7 +85,12 @@ const App = () => {
         <Route path="/books" element={<Books books={booksResult.data.allBooks} />} />
         <Route path="/add-books" element={<NewBook setNotify={notify} />} />
         <Route path="/login" element={<LoginForm setToken={setToken} setNotify={notify} refetch={currentUser.refetch} />} />
-        <Route path='/recommend' element={<Recommend favoriteGenre={currentUser.data.me.favoriteGenre} />} />
+        <Route path='/recommend' element={
+          currentUser.data && currentUser.data.me
+          ? <Recommend favoriteGenre={currentUser.data.me.favoriteGenre} />
+          : <div>Loading...</div>
+        }
+        /> 
       </Routes>
     </div>
   );

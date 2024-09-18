@@ -10,6 +10,12 @@ const Recommend = ({ favoriteGenre }) => {
   if (recommendedBooks.loading) {
     return <div>Loading...</div>
   }
+
+  const books = recommendedBooks.data ? recommendedBooks.data.allBooks : []
+
+  if (books.length === 0) {
+    return <div>No books found in the genre {favoriteGenre}</div>
+  }
   
   return (
     <div>
