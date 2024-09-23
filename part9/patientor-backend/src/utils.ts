@@ -12,5 +12,3 @@ export const NewEntrySchema = z.object({
 export const toNewPatientEntry = (object: unknown): NewPatientEntry => {
   return NewEntrySchema.parse(object);
 };
-
-export default toNewPatientEntry;
