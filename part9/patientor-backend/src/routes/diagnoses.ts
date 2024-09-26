@@ -1,10 +1,10 @@
 import express, { Response } from 'express';
 import diagnosesService from '../services/diagnosesService';
-import { DiagnoseEntry } from '../types';
+import { Diagnosis } from '../types';
 
 const router = express.Router();
 
-router.get('/', (_req, res: Response<DiagnoseEntry[]>) => {
+router.get('/', (_req, res: Response<Diagnosis[]>) => {
   res.send(diagnosesService.getEntries());
 });
 
