@@ -40,6 +40,8 @@ interface BaseEntry {
   //diagnosisCodes?: Diagnosis['code'][];
 }
 
+export type NewBaseEntry = Omit<BaseEntry, 'id'>;
+
 export enum HealthCheckRating {
   "Healthy" = 0,
   "LowRisk" = 1,
@@ -53,8 +55,8 @@ interface HealthCheckEntry extends BaseEntry {
 }
 
 interface SickLeave {
-  startDate: string;
-  endDate: string;
+  startDate?: string;
+  endDate?: string;
 }
 
 interface OccupationalHealthcareEntry extends BaseEntry {
@@ -77,3 +79,7 @@ export type Entry =
   | HospitalEntry
   | OccupationalHealthcareEntry
   | HealthCheckEntry;
+
+type UnionOmit<T, K extends string | number | symbol> = T extends unknown ? Omit<T, K> : never;
+  
+export type NewEntry = UnionOmit<Entry, 'id'>;

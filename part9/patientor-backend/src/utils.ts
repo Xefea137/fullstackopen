@@ -1,11 +1,11 @@
 import { z } from "zod";
 import { Gender, HealthCheckRating } from "./types";
 
-/*const DiagnosisSchema = z.object({
+export const DiagnosisSchema = z.object({
   code: z.string(),
   name: z.string(),
   latin: z.string().optional()
-});*/
+});
 
 const BaseEntrySchema = z.object({
   id: z.string(),
@@ -21,8 +21,8 @@ const HealthCheckEntrySchema = BaseEntrySchema.extend({
 });
 
 const SickLeaveSchema = z.object({
-  startDate: z.string().date(),
-  endDate: z.string().date()
+  startDate: z.string().date().optional(),
+  endDate: z.string().date().optional()
 });
 
 const OccupationalHealthcareEntrySchema = BaseEntrySchema.extend({
@@ -47,11 +47,17 @@ export const NewEntrySchema = z.union([
   HospitalEntrySchema
 ]);
 
+export const NewEntrySchemaWithoutId = z.union([
+  HealthCheckEntrySchema.omit({ id: true }),
+  OccupationalHealthcareEntrySchema.omit({ id: true }),
+  HospitalEntrySchema.omit({ id: true }),
+]);
+
 export const NewPatientSchema = z.object({
   name: z.string(),
   dateOfBirth: z.string().date(),
   ssn: z.string(),
   gender: z.nativeEnum(Gender),
   occupation: z.string(),
-  entries: z.array(NewEntrySchema)
+  entries: z.array(NewEntrySchema).default([])
 });

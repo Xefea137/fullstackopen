@@ -9,11 +9,16 @@ const utils_1 = require("../utils");
 const zod_1 = require("zod");
 const router = express_1.default.Router();
 router.get('/', (_req, res) => {
-    res.send(patientsService_1.default.getNonSsnEntries());
+    //res.send(patientsService.getNonSsnEntries());
+    res.send(patientsService_1.default.getEntries());
+});
+router.get('/:id', (req, res) => {
+    const id = req.params.id;
+    res.send(patientsService_1.default.patientDetail(id));
 });
 const newPatientParser = (req, _res, next) => {
     try {
-        utils_1.NewEntrySchema.parse(req.body);
+        utils_1.NewPatientSchema.parse(req.body);
         next();
     }
     catch (error) {
@@ -30,7 +35,30 @@ const errorMiddleware = (error, _req, res, next) => {
     ;
 };
 router.post('/', newPatientParser, (req, res) => {
-    const addedEntry = patientsService_1.default.addPatient(req.body);
+    const addedPatient = patientsService_1.default.addPatient(req.body);
+    res.json(addedPatient);
+});
+const parseDiagnosisCodes = (object) => {
+    if (!object || typeof object !== 'object' || !('diagnosisCodes' in object)) {
+        return [];
+    }
+    return object.diagnosisCodes;
+};
+const newEntryParser = (req, _res, next) => {
+    try {
+        utils_1.NewEntrySchemaWithoutId.parse(req.body);
+        next();
+    }
+    catch (error) {
+        next(error);
+    }
+};
+router.post('/:id/entries', newEntryParser, (req, res) => {
+    const id = req.params.id;
+    const diagnosisCodes = parseDiagnosisCodes(req.body);
+    const newEntry = Object.assign(Object.assign({}, req.body), { diagnosisCodes });
+    const addedEntry = patientsService_1.default.addPatientEntry(id, newEntry);
+    //const addedEntry = patientsService.addPatientEntry(id, req.body);
     res.json(addedEntry);
 });
 router.use(errorMiddleware);

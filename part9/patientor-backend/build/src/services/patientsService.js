@@ -20,12 +20,27 @@ const getNonSsnEntries = () => {
 };
 const addPatient = (entry) => {
     const id = (0, uuid_1.v1)();
-    const newPatientEntry = Object.assign({ id }, entry);
+    const newPatientEntry = Object.assign(Object.assign({ id }, entry), { entries: [] });
     patients.push(newPatientEntry);
     return newPatientEntry;
+};
+const patientDetail = (id) => {
+    return patients.find(p => p.id === id);
+};
+const addPatientEntry = (pId, entry) => {
+    const id = (0, uuid_1.v1)();
+    const newEntry = Object.assign({ id }, entry);
+    const patient = patients.find(p => p.id === pId);
+    //patient?.entries.push(newEntry);
+    if (patient) {
+        patient.entries.push(newEntry);
+    }
+    return newEntry;
 };
 exports.default = {
     getEntries,
     getNonSsnEntries,
-    addPatient
+    addPatient,
+    patientDetail,
+    addPatientEntry
 };
