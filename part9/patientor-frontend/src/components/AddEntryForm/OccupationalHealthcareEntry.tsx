@@ -13,6 +13,7 @@ const OccupationalHealthcareEntry = ({ employerName, setEmployerName,
   return (
     <>
       <TextField
+        sx={{ mt: 1 }}
         label="Employer Name"
         required
         type="text"
